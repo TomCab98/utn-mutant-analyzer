@@ -1,6 +1,6 @@
 package com.example.mutantes.config;
 
-import com.example.mutantes.entities.audit.Revision;
+import com.example.mutantes.repositories.entities.Revision;
 import org.hibernate.envers.RevisionListener;
 
 public class CustomRevisionListener implements RevisionListener {

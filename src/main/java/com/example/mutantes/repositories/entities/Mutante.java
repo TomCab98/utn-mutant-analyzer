@@ -1,4 +1,4 @@
-package com.example.mutantes.entities;
+package com.example.mutantes.repositories.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

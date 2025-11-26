@@ -1,4 +1,4 @@
-package com.example.mutantes.entities;
+package com.example.mutantes.repositories.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

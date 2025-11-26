@@ -1,4 +1,4 @@
-package com.example.mutantes.entities.audit;
+package com.example.mutantes.repositories.entities;
 
 import com.example.mutantes.config.CustomRevisionListener;
 import jakarta.persistence.Column;

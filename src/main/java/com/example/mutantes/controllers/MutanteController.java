@@ -1,7 +1,7 @@
 package com.example.mutantes.controllers;
 
-import com.example.mutantes.entities.Mutante;
-import com.example.mutantes.entities.EstadisticasDTO;
+import com.example.mutantes.repositories.entities.Mutante;
+import com.example.mutantes.repositories.entities.EstadisticasDTO;
 import com.example.mutantes.services.MutanteService;
 import java.util.List;
 import org.springframework.http.HttpStatus;

@@ -1,8 +1,8 @@
 package com.example.mutantes.services;
 
 import com.example.mutantes.config.AuditContextHolder;
-import com.example.mutantes.entities.Mutante;
-import com.example.mutantes.entities.EstadisticasDTO;
+import com.example.mutantes.repositories.entities.Mutante;
+import com.example.mutantes.repositories.entities.EstadisticasDTO;
 import com.example.mutantes.exceptions.ArgumentoNoValidoException;
 import com.example.mutantes.exceptions.MutanteNoEncontradoException;
 import com.example.mutantes.repositories.MutanteRepository;
