@@ -1,0 +1,295 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > MutanteService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.mutantes.services</a>
+</div>
+
+<h1>Coverage Summary for Class: MutanteService (com.example.mutantes.services)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MutanteService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (15/15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96%
+  </span>
+  <span class="absValue">
+    (48/50)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (76/76)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.mutantes.services;
+&nbsp;
+&nbsp;import com.example.mutantes.config.AuditContextHolder;
+&nbsp;import com.example.mutantes.dtos.EstadisticasDTO;
+&nbsp;import com.example.mutantes.dtos.PersonaDTO;
+&nbsp;import com.example.mutantes.mappers.EstadisticasMapper;
+&nbsp;import com.example.mutantes.mappers.PersonaMapper;
+&nbsp;import com.example.mutantes.repositories.entities.Persona;
+&nbsp;import com.example.mutantes.exceptions.ArgumentoNoValidoException;
+&nbsp;import com.example.mutantes.exceptions.MutanteNoEncontradoException;
+&nbsp;import com.example.mutantes.repositories.PersonaRepository;
+&nbsp;import jakarta.transaction.Transactional;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Set;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;@Service
+&nbsp;public class MutanteService implements BaseService&lt;PersonaDTO&gt; {
+&nbsp;
+&nbsp;  private static final int SEQ_LENGTH = 4;
+<b class="fc">&nbsp;  private static final Set&lt;String&gt; MUTANT_SEQUENCES = Set.of(&quot;AAAA&quot;, &quot;TTTT&quot;, &quot;CCCC&quot;, &quot;GGGG&quot;);</b>
+&nbsp;
+&nbsp;  private final PersonaRepository personaRepository;
+&nbsp;  private final PersonaMapper personaMapper;
+&nbsp;
+&nbsp;  public MutanteService(
+&nbsp;      PersonaRepository personaRepository,
+&nbsp;      PersonaMapper personaMapper,
+&nbsp;      EstadisticasMapper estadisticasMapper
+<b class="fc">&nbsp;  ) {</b>
+<b class="fc">&nbsp;    this.personaMapper = personaMapper;</b>
+<b class="fc">&nbsp;    this.personaRepository = personaRepository;</b>
+<b class="fc">&nbsp;  }</b>
+&nbsp;
+&nbsp;  @Transactional
+&nbsp;  public boolean analyze(PersonaDTO dto) {
+<b class="fc">&nbsp;    Persona persona = personaMapper.toEntity(dto);</b>
+<b class="fc">&nbsp;    validarEntradaADN(persona.getAdn());</b>
+&nbsp;
+<b class="fc">&nbsp;    boolean resultado = isMutant(persona.getAdn());</b>
+<b class="fc">&nbsp;    persona.setEsMutante(resultado);</b>
+&nbsp;
+<b class="fc">&nbsp;    AuditContextHolder.setOperacion(&quot;CREATE&quot;);</b>
+<b class="fc">&nbsp;    personaRepository.save(persona);</b>
+<b class="fc">&nbsp;    return resultado;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public List&lt;PersonaDTO&gt; findAll() {
+<b class="fc">&nbsp;    List&lt;Persona&gt; personas = personaRepository.findAll();</b>
+<b class="fc">&nbsp;    return personaMapper.toDtoList(personas);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public PersonaDTO findById(Long id) {
+<b class="fc">&nbsp;    Persona persona = personaRepository.findById(id)</b>
+<b class="fc">&nbsp;        .orElseThrow(() -&gt; new MutanteNoEncontradoException(&quot;Mutante con id: &quot; + id + &quot; no encontrado&quot;));</b>
+&nbsp;
+<b class="fc">&nbsp;    return personaMapper.toDto(persona);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public PersonaDTO update(Long id, PersonaDTO entity) {
+<b class="fc">&nbsp;    AuditContextHolder.setOperacion(&quot;UPDATE&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;    PersonaDTO existente = findById(id);</b>
+<b class="fc">&nbsp;    Persona actualizado = personaRepository.save(personaMapper.toEntity(existente));</b>
+<b class="fc">&nbsp;    return personaMapper.toDto(actualizado);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public void delete(Long id) {
+<b class="fc">&nbsp;    if (!personaRepository.existsById(id)) {</b>
+<b class="fc">&nbsp;      throw new MutanteNoEncontradoException(&quot;Mutante con id: &quot; + id + &quot; no encontrado&quot;);</b>
+&nbsp;    }
+<b class="fc">&nbsp;    AuditContextHolder.setOperacion(&quot;DELETE&quot;);</b>
+<b class="fc">&nbsp;    personaRepository.deleteById(id);</b>
+<b class="fc">&nbsp;  }</b>
+&nbsp;
+&nbsp;  protected boolean isMutant(List&lt;String&gt; adn) {
+<b class="fc">&nbsp;    int totalSecuencias = countSequencesInAllDirections(adn);</b>
+&nbsp;
+<b class="fc">&nbsp;    return totalSecuencias &gt; 1;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  private int countSequencesInAllDirections(List&lt;String&gt; adn) {
+<b class="fc">&nbsp;    int count = 0;</b>
+<b class="fc">&nbsp;    int n = adn.size();</b>
+&nbsp;
+<b class="fc">&nbsp;    for (int i = 0; i &lt; n; i++) {</b>
+<b class="fc">&nbsp;      for (int j = 0; j &lt; n; j++) {</b>
+&nbsp;
+<b class="fc">&nbsp;        count += checkHorizontal(adn, i, j);</b>
+<b class="fc">&nbsp;        count += checkVertical(adn, i, j);</b>
+<b class="fc">&nbsp;        count += checkDiagonal(adn, i, j);</b>
+<b class="fc">&nbsp;        count += checkDiagonalInversa(adn, i, j);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (count &gt; 1) {</b>
+<b class="fc">&nbsp;          return count;</b>
+&nbsp;        }
+&nbsp;      }
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    return count;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  private int checkHorizontal(List&lt;String&gt; adn, int row, int col) {
+<b class="fc">&nbsp;    if (col + SEQ_LENGTH &gt; adn.size()) {</b>
+<b class="fc">&nbsp;      return 0;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    String seq = adn.get(row).substring(col, col + SEQ_LENGTH);</b>
+<b class="fc">&nbsp;    return MUTANT_SEQUENCES.contains(seq) ? 1 : 0;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  private int checkVertical(List&lt;String&gt; adn, int row, int col) {
+<b class="fc">&nbsp;    if (row + SEQ_LENGTH &gt; adn.size()) {</b>
+<b class="fc">&nbsp;      return 0;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    StringBuilder sb = new StringBuilder(SEQ_LENGTH);</b>
+<b class="fc">&nbsp;    for (int k = 0; k &lt; SEQ_LENGTH; k++) {</b>
+<b class="fc">&nbsp;      sb.append(adn.get(row + k).charAt(col));</b>
+&nbsp;    }
+<b class="fc">&nbsp;    return MUTANT_SEQUENCES.contains(sb.toString()) ? 1 : 0;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  private int checkDiagonal(List&lt;String&gt; adn, int row, int col) {
+<b class="fc">&nbsp;    if (row + SEQ_LENGTH &gt; adn.size() || col + SEQ_LENGTH &gt; adn.size()) {</b>
+<b class="fc">&nbsp;      return 0;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    StringBuilder sb = new StringBuilder(SEQ_LENGTH);</b>
+<b class="fc">&nbsp;    for (int k = 0; k &lt; SEQ_LENGTH; k++) {</b>
+<b class="fc">&nbsp;      sb.append(adn.get(row + k).charAt(col + k));</b>
+&nbsp;    }
+<b class="fc">&nbsp;    return MUTANT_SEQUENCES.contains(sb.toString()) ? 1 : 0;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  private int checkDiagonalInversa(List&lt;String&gt; adn, int row, int col) {
+<b class="fc">&nbsp;    if (row + SEQ_LENGTH &gt; adn.size() || col - (SEQ_LENGTH - 1) &lt; 0) {</b>
+<b class="fc">&nbsp;      return 0;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    StringBuilder sb = new StringBuilder(SEQ_LENGTH);</b>
+<b class="fc">&nbsp;    for (int k = 0; k &lt; SEQ_LENGTH; k++) {</b>
+<b class="fc">&nbsp;      sb.append(adn.get(row + k).charAt(col - k));</b>
+&nbsp;    }
+<b class="pc">&nbsp;    return MUTANT_SEQUENCES.contains(sb.toString()) ? 1 : 0;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  private void validarEntradaADN(List&lt;String&gt; adn) {
+<b class="fc">&nbsp;    if (adn == null || adn.isEmpty()) {</b>
+<b class="fc">&nbsp;      throw new ArgumentoNoValidoException(&quot;ADN invalido&quot;);</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    adn.replaceAll(String::toUpperCase);</b>
+&nbsp;
+<b class="fc">&nbsp;    int n = adn.size();</b>
+&nbsp;
+<b class="fc">&nbsp;    for (String fila : adn) {</b>
+<b class="pc">&nbsp;      if (fila == null || fila.length() != n) {</b>
+<b class="fc">&nbsp;        throw new ArgumentoNoValidoException(&quot;El ADN debe ser una matriz NxN&quot;);</b>
+&nbsp;      }
+&nbsp;
+<b class="fc">&nbsp;      if (!fila.matches(&quot;[ACGT]+&quot;)) {</b>
+<b class="fc">&nbsp;        throw new ArgumentoNoValidoException(&quot;ADN contiene caracteres invalidos&quot;);</b>
+&nbsp;      }
+<b class="fc">&nbsp;    }</b>
+<b class="fc">&nbsp;  }</b>
+&nbsp;
+&nbsp;  public EstadisticasDTO obtenerEstadisticas() {
+<b class="fc">&nbsp;    long totalMutantes = personaRepository.countByEsMutante(true);</b>
+<b class="fc">&nbsp;    long totalHumanos = personaRepository.countByEsMutante(false);</b>
+<b class="fc">&nbsp;    double ratio = totalHumanos == 0 ? 0 : (double) totalMutantes / totalHumanos;</b>
+&nbsp;
+<b class="fc">&nbsp;    return new EstadisticasDTO(totalMutantes, totalHumanos, ratio);</b>
+&nbsp;  }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-11-26 20:10</div>
+</div>
+</body>
+</html>

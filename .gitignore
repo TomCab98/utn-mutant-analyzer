@@ -5,7 +5,7 @@ build/*
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-!build/libs/mutantes-0.0.1-SNAPSHOT.jar
+!build/libs/personas-0.0.1-SNAPSHOT.jar
 ### STS ###
 .apt_generated
 .classpath

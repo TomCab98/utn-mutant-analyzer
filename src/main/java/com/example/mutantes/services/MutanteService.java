@@ -1,65 +1,80 @@
 package com.example.mutantes.services;
 
 import com.example.mutantes.config.AuditContextHolder;
-import com.example.mutantes.repositories.entities.Mutante;
-import com.example.mutantes.repositories.entities.EstadisticasDTO;
+import com.example.mutantes.dtos.EstadisticasDTO;
+import com.example.mutantes.dtos.PersonaDTO;
+import com.example.mutantes.mappers.EstadisticasMapper;
+import com.example.mutantes.mappers.PersonaMapper;
+import com.example.mutantes.repositories.entities.Persona;
 import com.example.mutantes.exceptions.ArgumentoNoValidoException;
 import com.example.mutantes.exceptions.MutanteNoEncontradoException;
-import com.example.mutantes.repositories.MutanteRepository;
+import com.example.mutantes.repositories.PersonaRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Set;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MutanteService implements BaseService<Mutante> {
+public class MutanteService implements BaseService<PersonaDTO> {
 
   private static final int SEQ_LENGTH = 4;
   private static final Set<String> MUTANT_SEQUENCES = Set.of("AAAA", "TTTT", "CCCC", "GGGG");
 
-  private final MutanteRepository mutanteRepository;
+  private final PersonaRepository personaRepository;
+  private final PersonaMapper personaMapper;
 
-  public MutanteService(MutanteRepository mutanteRepository) {
-    this.mutanteRepository = mutanteRepository;
+  public MutanteService(
+      PersonaRepository personaRepository,
+      PersonaMapper personaMapper,
+      EstadisticasMapper estadisticasMapper
+  ) {
+    this.personaMapper = personaMapper;
+    this.personaRepository = personaRepository;
   }
 
   @Transactional
-  public boolean analyze(Mutante persona) {
+  public boolean analyze(PersonaDTO dto) {
+    Persona persona = personaMapper.toEntity(dto);
     validarEntradaADN(persona.getAdn());
 
     boolean resultado = isMutant(persona.getAdn());
     persona.setEsMutante(resultado);
 
     AuditContextHolder.setOperacion("CREATE");
-    mutanteRepository.save(persona);
+    personaRepository.save(persona);
     return resultado;
   }
 
   @Override
-  public List<Mutante> findAll() {
-    return mutanteRepository.findAll();
+  public List<PersonaDTO> findAll() {
+    List<Persona> personas = personaRepository.findAll();
+    return personaMapper.toDtoList(personas);
   }
 
   @Override
-  public Mutante findById(Long id) {
-    return mutanteRepository.findById(id)
+  public PersonaDTO findById(Long id) {
+    Persona persona = personaRepository.findById(id)
         .orElseThrow(() -> new MutanteNoEncontradoException("Mutante con id: " + id + " no encontrado"));
+
+    return personaMapper.toDto(persona);
   }
 
   @Override
-  public Mutante update(Long id, Mutante entity) {
-    Mutante existente = findById(id);
+  public PersonaDTO update(Long id, PersonaDTO entity) {
     AuditContextHolder.setOperacion("UPDATE");
-    return mutanteRepository.save(existente);
+
+    PersonaDTO existente = findById(id);
+    Persona actualizado = personaRepository.save(personaMapper.toEntity(existente));
+    return personaMapper.toDto(actualizado);
   }
 
   @Override
   public void delete(Long id) {
-    if (!mutanteRepository.existsById(id)) {
+    if (!personaRepository.existsById(id)) {
       throw new MutanteNoEncontradoException("Mutante con id: " + id + " no encontrado");
     }
     AuditContextHolder.setOperacion("DELETE");
-    mutanteRepository.deleteById(id);
+    personaRepository.deleteById(id);
   }
 
   protected boolean isMutant(List<String> adn) {
@@ -155,8 +170,8 @@ public class MutanteService implements BaseService<Mutante> {
   }
 
   public EstadisticasDTO obtenerEstadisticas() {
-    long totalMutantes = mutanteRepository.countByEsMutante(true);
-    long totalHumanos = mutanteRepository.countByEsMutante(false);
+    long totalMutantes = personaRepository.countByEsMutante(true);
+    long totalHumanos = personaRepository.countByEsMutante(false);
     double ratio = totalHumanos == 0 ? 0 : (double) totalMutantes / totalHumanos;
 
     return new EstadisticasDTO(totalMutantes, totalHumanos, ratio);

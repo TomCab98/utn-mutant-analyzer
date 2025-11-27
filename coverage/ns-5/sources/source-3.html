@@ -1,0 +1,95 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > PersonaMapper</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.mutantes.mappers</a>
+</div>
+
+<h1>Coverage Summary for Class: PersonaMapper (com.example.mutantes.mappers)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">PersonaMapper$MockitoMock$ffEousqS</td>
+  </tr>
+  <tr>
+    <td class="name">PersonaMapper$MockitoMock$ffEousqS$auxiliary$2tm9IjdX</td>
+  </tr>
+  <tr>
+    <td class="name">PersonaMapper$MockitoMock$ffEousqS$auxiliary$koFUC9FG</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.mutantes.mappers;
+&nbsp;
+&nbsp;import com.example.mutantes.dtos.PersonaDTO;
+&nbsp;import com.example.mutantes.repositories.entities.Persona;
+&nbsp;import java.util.List;
+&nbsp;import org.mapstruct.Mapper;
+&nbsp;import org.mapstruct.Mapping;
+&nbsp;
+&nbsp;@Mapper(componentModel = &quot;spring&quot;)
+&nbsp;public interface PersonaMapper {
+&nbsp;
+&nbsp;  PersonaDTO toDto(Persona model);
+&nbsp;
+&nbsp;  @Mapping(target = &quot;id&quot;, ignore = true)
+&nbsp;  Persona toEntity(PersonaDTO dto);
+&nbsp;
+&nbsp;  List&lt;PersonaDTO&gt; toDtoList(List&lt;Persona&gt; models);
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-11-26 20:10</div>
+</div>
+</body>
+</html>

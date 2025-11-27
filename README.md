@@ -1,6 +1,6 @@
 # Mutant Analyzer
 ## Descripción del Proyecto
-Magneto quiere reclutar tantos mutantes como sea posible para luchar contra los X-Men. Este proyecto es una API REST diseñada para ayudarlo a detectar si un humano es un mutante basándose en su secuencia de ADN.
+Magneto quiere reclutar tantos personas como sea posible para luchar contra los X-Men. Este proyecto es una API REST diseñada para ayudarlo a detectar si un humano es un mutante basándose en su secuencia de ADN.
 
 El sistema recibe como parámetro un array de Strings que representan cada fila de una tabla de (NxN) con la secuencia del ADN. Las letras de los Strings solo pueden ser: (A,T,C,G), las cuales representa cada base nitrogenada.
 

@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 public class OpenApiConfig {
 
   @Bean
-  public OpenAPI openApiConfig() {
+  public OpenAPI customOpenAPI() {
     Server devServer = new Server();
     devServer.setUrl("http://localhost:8080");
     devServer.setDescription("Servidor de desarrollo local");

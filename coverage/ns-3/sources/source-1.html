@@ -1,0 +1,313 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > MutanteController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.mutantes.controllers</a>
+</div>
+
+<h1>Coverage Summary for Class: MutanteController (com.example.mutantes.controllers)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MutanteController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (16/16)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.mutantes.controllers;
+&nbsp;
+&nbsp;import com.example.mutantes.dtos.EstadisticasDTO;
+&nbsp;import com.example.mutantes.dtos.PersonaDTO;
+&nbsp;import com.example.mutantes.services.MutanteService;
+&nbsp;import io.swagger.v3.oas.annotations.Operation;
+&nbsp;import io.swagger.v3.oas.annotations.Parameter;
+&nbsp;import io.swagger.v3.oas.annotations.media.Content;
+&nbsp;import io.swagger.v3.oas.annotations.media.Schema;
+&nbsp;import io.swagger.v3.oas.annotations.media.ArraySchema;
+&nbsp;import io.swagger.v3.oas.annotations.responses.ApiResponse;
+&nbsp;import io.swagger.v3.oas.annotations.responses.ApiResponses;
+&nbsp;import io.swagger.v3.oas.annotations.tags.Tag;
+&nbsp;import jakarta.validation.Valid;
+&nbsp;import java.util.List;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.CrossOrigin;
+&nbsp;import org.springframework.web.bind.annotation.DeleteMapping;
+&nbsp;import org.springframework.web.bind.annotation.GetMapping;
+&nbsp;import org.springframework.web.bind.annotation.PathVariable;
+&nbsp;import org.springframework.web.bind.annotation.PostMapping;
+&nbsp;import org.springframework.web.bind.annotation.PutMapping;
+&nbsp;import org.springframework.web.bind.annotation.RequestBody;
+&nbsp;import org.springframework.web.bind.annotation.RequestMapping;
+&nbsp;import org.springframework.web.bind.annotation.RestController;
+&nbsp;
+&nbsp;@RestController
+&nbsp;@CrossOrigin(origins = &quot;*&quot;)
+&nbsp;@RequestMapping(path = &quot;/api/mutant&quot;)
+&nbsp;@Tag(name = &quot;Mutante&quot;, description = &quot;API para la gestión y análisis de mutantes&quot;)
+&nbsp;public class MutanteController {
+&nbsp;
+&nbsp;  private final MutanteService mutanteService;
+&nbsp;
+<b class="fc">&nbsp;  public MutanteController(MutanteService mutanteService) {</b>
+<b class="fc">&nbsp;    this.mutanteService = mutanteService;</b>
+<b class="fc">&nbsp;  }</b>
+&nbsp;
+&nbsp;  @Operation(
+&nbsp;      summary = &quot;Obtener todos los mutantes&quot;,
+&nbsp;      description = &quot;Retorna una lista completa de todas las personas registradas en el sistema, tanto mutantes como humanos&quot;
+&nbsp;  )
+&nbsp;  @ApiResponses(value = {
+&nbsp;      @ApiResponse(
+&nbsp;          responseCode = &quot;200&quot;,
+&nbsp;          description = &quot;Lista de personas obtenida exitosamente&quot;,
+&nbsp;          content = @Content(
+&nbsp;              mediaType = &quot;application/json&quot;,
+&nbsp;              array = @ArraySchema(schema = @Schema(implementation = PersonaDTO.class))
+&nbsp;          )
+&nbsp;      )
+&nbsp;  })
+&nbsp;  @GetMapping
+&nbsp;  public ResponseEntity&lt;?&gt; getAll() {
+<b class="fc">&nbsp;    List&lt;PersonaDTO&gt; mutantes = mutanteService.findAll();</b>
+<b class="fc">&nbsp;    return ResponseEntity.status(HttpStatus.OK).body(mutantes);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Operation(
+&nbsp;      summary = &quot;Obtener persona por ID&quot;,
+&nbsp;      description = &quot;Retorna los detalles de una persona específica identificada por su ID&quot;
+&nbsp;  )
+&nbsp;  @ApiResponses(value = {
+&nbsp;      @ApiResponse(
+&nbsp;          responseCode = &quot;200&quot;,
+&nbsp;          description = &quot;Persona encontrada exitosamente&quot;,
+&nbsp;          content = @Content(
+&nbsp;              mediaType = &quot;application/json&quot;,
+&nbsp;              schema = @Schema(implementation = PersonaDTO.class)
+&nbsp;          )
+&nbsp;      ),
+&nbsp;      @ApiResponse(
+&nbsp;          responseCode = &quot;404&quot;,
+&nbsp;          description = &quot;Persona no encontrada&quot;
+&nbsp;      )
+&nbsp;  })
+&nbsp;  @GetMapping(&quot;/{id}&quot;)
+&nbsp;  public ResponseEntity&lt;?&gt; get(
+&nbsp;      @Parameter(description = &quot;ID de la persona a buscar&quot;, required = true)
+&nbsp;      @PathVariable Long id
+&nbsp;  ) {
+<b class="fc">&nbsp;    PersonaDTO mutante = mutanteService.findById(id);</b>
+<b class="fc">&nbsp;    return ResponseEntity.status(HttpStatus.OK).body(mutante);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Operation(
+&nbsp;      summary = &quot;Actualizar persona&quot;,
+&nbsp;      description = &quot;Actualiza los datos de una persona existente en el sistema&quot;
+&nbsp;  )
+&nbsp;  @ApiResponses(value = {
+&nbsp;      @ApiResponse(
+&nbsp;          responseCode = &quot;200&quot;,
+&nbsp;          description = &quot;Persona actualizada exitosamente&quot;,
+&nbsp;          content = @Content(
+&nbsp;              mediaType = &quot;application/json&quot;,
+&nbsp;              schema = @Schema(implementation = PersonaDTO.class)
+&nbsp;          )
+&nbsp;      ),
+&nbsp;      @ApiResponse(
+&nbsp;          responseCode = &quot;404&quot;,
+&nbsp;          description = &quot;Persona no encontrada&quot;
+&nbsp;      ),
+&nbsp;      @ApiResponse(
+&nbsp;          responseCode = &quot;400&quot;,
+&nbsp;          description = &quot;Datos de entrada inválidos&quot;
+&nbsp;      )
+&nbsp;  })
+&nbsp;  @PutMapping(&quot;/{id}&quot;)
+&nbsp;  public ResponseEntity&lt;?&gt; update(
+&nbsp;      @Parameter(description = &quot;ID de la persona a actualizar&quot;, required = true)
+&nbsp;      @PathVariable Long id,
+&nbsp;      @Parameter(description = &quot;Datos actualizados de la persona&quot;, required = true)
+&nbsp;      @Valid @RequestBody PersonaDTO entity
+&nbsp;  ) {
+<b class="fc">&nbsp;    PersonaDTO mutante = mutanteService.update(id, entity);</b>
+<b class="fc">&nbsp;    return ResponseEntity.status(HttpStatus.OK).body(mutante);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Operation(
+&nbsp;      summary = &quot;Eliminar persona&quot;,
+&nbsp;      description = &quot;Elimina una persona del sistema de forma permanente&quot;
+&nbsp;  )
+&nbsp;  @ApiResponses(value = {
+&nbsp;      @ApiResponse(
+&nbsp;          responseCode = &quot;204&quot;,
+&nbsp;          description = &quot;Persona eliminada exitosamente&quot;
+&nbsp;      ),
+&nbsp;      @ApiResponse(
+&nbsp;          responseCode = &quot;404&quot;,
+&nbsp;          description = &quot;Persona no encontrada&quot;
+&nbsp;      )
+&nbsp;  })
+&nbsp;  @DeleteMapping(&quot;/{id}&quot;)
+&nbsp;  public ResponseEntity&lt;?&gt; delete(
+&nbsp;      @Parameter(description = &quot;ID de la persona a eliminar&quot;, required = true)
+&nbsp;      @PathVariable Long id
+&nbsp;  ) {
+<b class="fc">&nbsp;    mutanteService.delete(id);</b>
+<b class="fc">&nbsp;    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Operation(
+&nbsp;      summary = &quot;Analizar ADN&quot;,
+&nbsp;      description = &quot;Analiza la secuencia de ADN de una persona para determinar si es mutante o humano. &quot; +
+&nbsp;          &quot;Se considera mutante si se encuentran más de una secuencia de cuatro letras iguales &quot; +
+&nbsp;          &quot;de forma oblicua, horizontal o vertical.&quot;
+&nbsp;  )
+&nbsp;  @ApiResponses(value = {
+&nbsp;      @ApiResponse(
+&nbsp;          responseCode = &quot;200&quot;,
+&nbsp;          description = &quot;Análisis completado exitosamente&quot;,
+&nbsp;          content = @Content(
+&nbsp;              mediaType = &quot;application/json&quot;,
+&nbsp;              schema = @Schema(implementation = String.class, example = &quot;La persona es un mutante&quot;)
+&nbsp;          )
+&nbsp;      ),
+&nbsp;      @ApiResponse(
+&nbsp;          responseCode = &quot;400&quot;,
+&nbsp;          description = &quot;Secuencia de ADN inválida&quot;
+&nbsp;      )
+&nbsp;  })
+&nbsp;  @PostMapping(&quot;/analizar&quot;)
+&nbsp;  public ResponseEntity&lt;?&gt; analyze(
+&nbsp;      @Parameter(
+&nbsp;          description = &quot;Objeto persona con la secuencia de ADN a analizar. &quot; +
+&nbsp;              &quot;El ADN debe ser una matriz NxN representada como un array de Strings.&quot;,
+&nbsp;          required = true
+&nbsp;      )
+&nbsp;      @Valid @RequestBody PersonaDTO persona
+&nbsp;  ) {
+<b class="fc">&nbsp;    boolean esMutante = mutanteService.analyze(persona);</b>
+<b class="fc">&nbsp;    return esMutante ?</b>
+<b class="fc">&nbsp;        ResponseEntity.status(HttpStatus.OK).body(&quot;La persona es un mutante&quot;) :</b>
+<b class="fc">&nbsp;        ResponseEntity.status(HttpStatus.OK).body(&quot;La persona no es un mutante&quot;);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Operation(
+&nbsp;      summary = &quot;Obtener estadísticas&quot;,
+&nbsp;      description = &quot;Retorna las estadísticas globales del sistema incluyendo la cantidad de mutantes, &quot; +
+&nbsp;          &quot;humanos y el ratio entre ellos&quot;
+&nbsp;  )
+&nbsp;  @ApiResponses(value = {
+&nbsp;      @ApiResponse(
+&nbsp;          responseCode = &quot;200&quot;,
+&nbsp;          description = &quot;Estadísticas obtenidas exitosamente&quot;,
+&nbsp;          content = @Content(
+&nbsp;              mediaType = &quot;application/json&quot;,
+&nbsp;              schema = @Schema(implementation = EstadisticasDTO.class)
+&nbsp;          )
+&nbsp;      )
+&nbsp;  })
+&nbsp;  @GetMapping(&quot;/estadisticas&quot;)
+&nbsp;  public ResponseEntity&lt;EstadisticasDTO&gt; obtenerEstadisticas() {
+<b class="fc">&nbsp;    return ResponseEntity.ok(mutanteService.obtenerEstadisticas());</b>
+&nbsp;  }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-11-26 20:10</div>
+</div>
+</body>
+</html>

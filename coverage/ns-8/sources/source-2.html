@@ -1,0 +1,127 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > EstadisticasDTO</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.mutantes.dtos</a>
+</div>
+
+<h1>Coverage Summary for Class: EstadisticasDTO (com.example.mutantes.dtos)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">EstadisticasDTO</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.mutantes.dtos;
+&nbsp;
+&nbsp;import io.swagger.v3.oas.annotations.media.Schema;
+&nbsp;import jakarta.validation.constraints.DecimalMin;
+&nbsp;import jakarta.validation.constraints.PositiveOrZero;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import lombok.Getter;
+&nbsp;import lombok.NoArgsConstructor;
+&nbsp;import lombok.Setter;
+&nbsp;
+&nbsp;@Getter
+&nbsp;@Setter
+&nbsp;@AllArgsConstructor
+&nbsp;@NoArgsConstructor
+&nbsp;@Schema(
+&nbsp;    description = &quot;DTO que contiene las estadísticas globales del sistema sobre la detección &quot; +
+&nbsp;        &quot;de mutantes y humanos. Proporciona métricas agregadas para análisis estadístico &quot; +
+&nbsp;        &quot;y reportes del sistema.&quot;
+&nbsp;)
+&nbsp;public class EstadisticasDTO {
+&nbsp;
+&nbsp;  @Schema(
+&nbsp;      description = &quot;Cantidad total de personas identificadas como mutantes en el sistema. &quot; +
+&nbsp;          &quot;Este contador se incrementa cada vez que se detecta una secuencia de ADN mutante. &quot; +
+&nbsp;          &quot;Un mutante es aquel que tiene más de una secuencia de cuatro letras iguales &quot; +
+&nbsp;          &quot;en forma oblicua, horizontal o vertical.&quot;,
+&nbsp;      example = &quot;40&quot;,
+&nbsp;      minimum = &quot;0&quot;,
+&nbsp;      accessMode = Schema.AccessMode.READ_ONLY
+&nbsp;  )
+&nbsp;  @PositiveOrZero(message = &quot;La cantidad de mutantes no puede ser negativa&quot;)
+&nbsp;  private long cantidadMutantes;
+&nbsp;
+&nbsp;  @Schema(
+&nbsp;      description = &quot;Cantidad total de personas identificadas como humanos (no mutantes) en el sistema. &quot; +
+&nbsp;          &quot;Este contador incluye todas las personas cuyo ADN no cumple con los criterios &quot; +
+&nbsp;          &quot;para ser clasificado como mutante.&quot;,
+&nbsp;      example = &quot;100&quot;,
+&nbsp;      minimum = &quot;0&quot;,
+&nbsp;      accessMode = Schema.AccessMode.READ_ONLY
+&nbsp;  )
+&nbsp;  @PositiveOrZero(message = &quot;La cantidad de humanos no puede ser negativa&quot;)
+&nbsp;  private long cantidadHumanos;
+&nbsp;
+&nbsp;  @Schema(
+&nbsp;      description = &quot;Ratio o proporción de mutantes respecto al total de humanos en el sistema. &quot; +
+&nbsp;          &quot;Se calcula mediante la fórmula: ratio = cantidadMutantes / cantidadHumanos. &quot; +
+&nbsp;          &quot;Consideraciones especiales: &quot; +
+&nbsp;          &quot;- Si cantidadHumanos es 0, el ratio será 0.0 para evitar división por cero &quot; +
+&nbsp;          &quot;- Si solo hay mutantes y ningún humano, el ratio será 0.0 &quot; +
+&nbsp;          &quot;- Un ratio de 0.4 significa que hay 4 mutantes por cada 10 humanos &quot; +
+&nbsp;          &quot;- Este valor es útil para análisis estadísticos y proyecciones demográficas&quot;,
+&nbsp;      example = &quot;0.4&quot;,
+&nbsp;      minimum = &quot;0.0&quot;,
+&nbsp;      accessMode = Schema.AccessMode.READ_ONLY
+&nbsp;  )
+&nbsp;  @DecimalMin(value = &quot;0.0&quot;, message = &quot;El ratio no puede ser negativo&quot;)
+&nbsp;  private double ratio;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-11-26 20:10</div>
+</div>
+</body>
+</html>

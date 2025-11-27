@@ -1,0 +1,171 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > PersonaDTO</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.mutantes.dtos</a>
+</div>
+
+<h1>Coverage Summary for Class: PersonaDTO (com.example.mutantes.dtos)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">PersonaDTO</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.mutantes.dtos;
+&nbsp;
+&nbsp;import io.swagger.v3.oas.annotations.media.Schema;
+&nbsp;import jakarta.validation.constraints.NotBlank;
+&nbsp;import jakarta.validation.constraints.NotEmpty;
+&nbsp;import jakarta.validation.constraints.NotNull;
+&nbsp;import jakarta.validation.constraints.Pattern;
+&nbsp;import jakarta.validation.constraints.Positive;
+&nbsp;import jakarta.validation.constraints.Size;
+&nbsp;import java.util.List;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import lombok.Getter;
+&nbsp;import lombok.NoArgsConstructor;
+&nbsp;import lombok.Setter;
+&nbsp;
+&nbsp;@Getter
+&nbsp;@Setter
+&nbsp;@AllArgsConstructor
+&nbsp;@NoArgsConstructor
+&nbsp;@Schema(
+&nbsp;    description = &quot;DTO que representa los datos de una persona para el análisis de ADN mutante. &quot; +
+&nbsp;        &quot;Contiene información personal y la secuencia genética a analizar.&quot;
+&nbsp;)
+&nbsp;public class PersonaDTO {
+&nbsp;
+&nbsp;  @Schema(
+&nbsp;      description = &quot;Identificador único de la persona en el sistema. &quot; +
+&nbsp;          &quot;Este campo es generado automáticamente y solo debe incluirse en respuestas, &quot; +
+&nbsp;          &quot;no en peticiones de creación.&quot;,
+&nbsp;      example = &quot;1&quot;,
+&nbsp;      accessMode = Schema.AccessMode.READ_ONLY
+&nbsp;  )
+&nbsp;  @Positive(message = &quot;El ID debe ser un número positivo&quot;)
+&nbsp;  private Long id;
+&nbsp;
+&nbsp;  @Schema(
+&nbsp;      description = &quot;Nombre de la persona. Debe contener solo letras y espacios. &quot; +
+&nbsp;          &quot;Es un campo obligatorio para el registro.&quot;,
+&nbsp;      example = &quot;Charles&quot;,
+&nbsp;      requiredMode = Schema.RequiredMode.REQUIRED,
+&nbsp;      minLength = 2,
+&nbsp;      maxLength = 100
+&nbsp;  )
+&nbsp;  @NotNull(message = &quot;El nombre no puede ser nulo&quot;)
+&nbsp;  @NotBlank(message = &quot;El nombre no puede estar vacío&quot;)
+&nbsp;  @Size(min = 2, max = 100, message = &quot;El nombre debe tener entre 2 y 100 caracteres&quot;)
+&nbsp;  @Pattern(
+&nbsp;      regexp = &quot;^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$&quot;,
+&nbsp;      message = &quot;El nombre solo puede contener letras y espacios&quot;
+&nbsp;  )
+&nbsp;  private String nombre;
+&nbsp;
+&nbsp;  @Schema(
+&nbsp;      description = &quot;Apellido de la persona. Debe contener solo letras y espacios. &quot; +
+&nbsp;          &quot;Es un campo obligatorio para el registro.&quot;,
+&nbsp;      example = &quot;Xavier&quot;,
+&nbsp;      requiredMode = Schema.RequiredMode.REQUIRED,
+&nbsp;      minLength = 2,
+&nbsp;      maxLength = 100
+&nbsp;  )
+&nbsp;  @NotNull(message = &quot;El apellido no puede ser nulo&quot;)
+&nbsp;  @NotBlank(message = &quot;El apellido no puede estar vacío&quot;)
+&nbsp;  @Size(min = 2, max = 100, message = &quot;El apellido debe tener entre 2 y 100 caracteres&quot;)
+&nbsp;  @Pattern(
+&nbsp;      regexp = &quot;^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$&quot;,
+&nbsp;      message = &quot;El apellido solo puede contener letras y espacios&quot;
+&nbsp;  )
+&nbsp;  private String apellido;
+&nbsp;
+&nbsp;  @Schema(
+&nbsp;      description = &quot;Indica si la persona ha sido identificada como mutante después del análisis de ADN. &quot; +
+&nbsp;          &quot;Este campo es calculado automáticamente por el sistema tras el análisis y no debe &quot; +
+&nbsp;          &quot;ser proporcionado en las peticiones de creación o análisis.&quot;,
+&nbsp;      example = &quot;true&quot;,
+&nbsp;      accessMode = Schema.AccessMode.READ_ONLY
+&nbsp;  )
+&nbsp;  private boolean esMutante;
+&nbsp;
+&nbsp;  @Schema(
+&nbsp;      description = &quot;Secuencia de ADN de la persona representada como una matriz NxN. &quot; +
+&nbsp;          &quot;Cada elemento del array representa una fila de la matriz de ADN. &quot; +
+&nbsp;          &quot;Requisitos: &quot; +
+&nbsp;          &quot;- Debe ser una matriz cuadrada (NxN) &quot; +
+&nbsp;          &quot;- Cada fila debe tener la misma longitud &quot; +
+&nbsp;          &quot;- Solo se permiten las letras A, T, C, G (representando las bases nitrogenadas: Adenina, Timina, Citosina, Guanina) &quot; +
+&nbsp;          &quot;- Todas las letras deben estar en mayúsculas &quot; +
+&nbsp;          &quot;- Se recomienda un mínimo de 4x4 para poder detectar secuencias mutantes&quot;,
+&nbsp;      example = &quot;[\&quot;ATGCGA\&quot;, \&quot;CAGTGC\&quot;, \&quot;TTATGT\&quot;, \&quot;AGAAGG\&quot;, \&quot;CCCCTA\&quot;, \&quot;TCACTG\&quot;]&quot;,
+&nbsp;      requiredMode = Schema.RequiredMode.REQUIRED
+&nbsp;  )
+&nbsp;  @NotNull(message = &quot;La secuencia de ADN no puede ser nula&quot;)
+&nbsp;  @NotEmpty(message = &quot;La secuencia de ADN no puede estar vacía&quot;)
+&nbsp;  @Size(min = 4, message = &quot;La secuencia de ADN debe tener al menos 4 filas&quot;)
+&nbsp;  private List&lt;
+&nbsp;      @NotNull(message = &quot;Las filas de ADN no pueden ser nulas&quot;)
+&nbsp;      @NotBlank(message = &quot;Las filas de ADN no pueden estar vacías&quot;)
+&nbsp;      @Pattern(
+&nbsp;          regexp = &quot;^[ATCG]+$&quot;,
+&nbsp;          message = &quot;Cada fila de ADN solo puede contener las letras A, T, C, G en mayúsculas&quot;
+&nbsp;      )
+&nbsp;          String
+&nbsp;      &gt; adn;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-11-26 20:10</div>
+</div>
+</body>
+</html>
