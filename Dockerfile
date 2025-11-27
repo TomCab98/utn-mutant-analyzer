@@ -7,7 +7,7 @@ COPY src ./src
 RUN chmod +x ./gradlew
 RUN ./gradlew bootJar -x test --no-daemon
 
-FROM openjdk:21-alpine
+FROM eclipse-temurin:21-jre-alpine
 LABEL description="API de Detección de Mutantes"
 LABEL version="1.0"
 RUN addgroup -S spring && adduser -S spring -G spring
